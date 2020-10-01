@@ -1,0 +1,94 @@
+*** Settings ***
+Library     Selenium2Library
+Variables   ../env.py
+
+*** Variables ***
+${BROWSER}              chrome
+${URL_GIST}             https://gist.github.com/avrianana
+${GIST_DESCRIPTION}     Testing E2E Gist
+${FILE_NAME}            Creating Public Gist
+${DESCRIPTION}          This is an example of creating public Gist
+${EDIT_GIST_DESCRIPTION}     Edit Testing E2E Gist 
+${EDIT_FILE_NAME}            Edit Creating Public Gist
+${EDIT_DESCRIPTION}          This is an example of edit creating public Gist
+
+*** Test Cases ***
+# 1 Create a Public Gist
+Open Browser To Gist Page
+    Open Browser    ${URL_GITS}    ${BROWSER}
+    Sleep           5s
+    Maximize Browser Window
+    Set Selenium Speed    1
+
+Click Create a Gist
+    Click Element   xpath=//*[@id="gist-pjax-container"]/div/div/div[2]/div[2]/p/a
+    sleep   3s
+
+Input Gits Description
+    Click Element   name=gist[description]    ${GIST_DESCRIPTION}
+    sleep   3s
+
+Input File Name
+    Click Element   name=gist[contents][][name]   ${FILE_NAME}
+    sleep   3s
+
+Input Description
+    Click Element   xpath=//*[@id="gists"]/div[2]/div/div[2]/div/div[5]/div[1]/div/div/div/div[5]/div/pre   ${DESCRIPTION}
+    sleep   3s
+
+#Click Add File (Optional)
+    Click Element   xpath=//*[@id="new_gist"]/div/div[2]/button
+    sleep   3s
+    
+Click Select Type
+    Click Element   xpath=//*[@id="new_gist"]/div/div[2]/div/details/summary
+    sleep   3s
+
+Choose Public Gist
+    Click Element   xpath=//*[@id="new_gist"]/div/div[2]/div/details/details-menu/label[2]/div
+    sleep   3s
+
+Click Public Gist
+    Click Element   xpath=//*[@id="new_gist"]/div/div[2]/div/button
+    sleep   3s
+    
+# 2 Edit an Existing Gist
+Click Edit
+    Click Element   xpath=//*[@id="gist-pjax-container"]/div[1]/div/div[1]/ul/li[1]/a
+    
+Edit Gits Description
+    Click Element   name=gist[description]    ${EDIT_GIST_DESCRIPTION}
+    sleep   3s
+
+Edit File Name
+    Click Element   name=gist[contents][][name]   ${EDIT_FILE_NAME}
+    sleep   3s
+
+Edit Description
+    Click Element   xpath=//*[@id="gists"]/div[2]/div/div[2]/div/div[5]/div[1]/div/div/div/div[5]/div/pre   ${EDIT_DESCRIPTION}
+    sleep   3s
+
+#Click Add File (Optional)
+    Click Element   xpath=//*[@id="new_gist"]/div/div[2]/button
+    sleep   3s
+
+Edit Click Public Gist
+    Click Element   xpath=//*[@id="edit_gist_105653842"]/div/div[2]/button
+    sleep   3s
+    
+# 3 Delete an Existing Gist
+Click Delete Cancel
+    Click Element   xpath=//*[@id="gist-pjax-container"]/div[1]/div/div[1]/ul/li[2]/form/button
+    sleep   3s
+    Handle Alert    action=Cancel
+    sleep   3s
+    
+Click Delete OK
+    Click Element   xpath=//*[@id="gist-pjax-container"]/div[1]/div/div[1]/ul/li[2]/form/button
+    sleep   3s
+    Handle Alert    action=OK
+    sleep   3s    
+
+# 4 See My List of Gist
+Validate Gist Page
+    Page Should Contain Element     xpath=//*[@id="gist-pjax-container"]/div/div/div[2]/div[1]/nav/div[1]/a/span
